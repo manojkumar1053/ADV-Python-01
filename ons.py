@@ -1,2 +1,0 @@
-print("ONS")
-print("ONS")
