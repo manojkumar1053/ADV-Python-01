@@ -3,6 +3,6 @@ data/neos.csv
 data/cad.json
 
 tests/
-
 .idea
+.idea/*
 .gitignore
