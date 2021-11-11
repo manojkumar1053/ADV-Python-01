@@ -103,6 +103,7 @@ class CloseApproach:
         # Create an attribute for the referenced NEO, originally None.
         self.neo = None
 
+
     @property
     def time_str(self):
         """Return a formatted representation of this `CloseApproach`'s approach time.
