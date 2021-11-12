@@ -102,6 +102,8 @@ class CloseApproach:
 
         # Create an attribute for the referenced NEO, originally None.
         self.neo = None
+        if self.neo:
+            return
 
 
     @property
