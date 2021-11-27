@@ -18,6 +18,8 @@ quirks of the data set, such as missing names and unknown diameters.
 You'll edit this file in Task 1.
 """
 from helpers import cd_to_datetime, datetime_to_str
+import math
+import datetime
 
 
 class NearEarthObject:
@@ -32,37 +34,35 @@ class NearEarthObject:
     initialized to an empty collection, but eventually populated in the
     `NEODatabase` constructor.
     """
-    # TODO: How can you, and should you, change the arguments to this constructor?
+
+    # Done: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
     def __init__(self, **info):
         """Create a new `NearEarthObject`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
-        # TODO: Assign information from the arguments passed to the constructor
-        # onto attributes named `designation`, `name`, `diameter`, and `hazardous`.
-        # You should coerce these values to their appropriate data type and
-        # handle any edge cases, such as a empty name being represented by `None`
-        # and a missing diameter being represented by `float('nan')`.
+        # Done: Assign information from the arguments passed to the constructor
         self.designation = info.get("pdes")
         self.name = info.get("name")
         self.diameter = info.get("diameter") if self.diameter else float("nan")
         self.hazardous = info.get("pha")
-    # Create an empty initial collection of linked approaches.
+        # Create an empty initial collection of linked approaches.
         self.approaches = []
 
     @property
     def fullname(self):
         """Return a representation of the full name of this NEO."""
-        # TODO: Use self.designation and self.name to build a fullname for this object.
-        return ''
+        # Done: Use self.designation and self.name to build a fullname for this object.
+        return f"{self.designation} ({self.name})" if self.name else self.designation
 
     def __str__(self):
         """Return `str(self)`."""
-        # TODO: Use this object's attributes to return a human-readable string representation.
-        # The project instructions include one possibility. Peek at the __repr__
-        # method for examples of advanced string formatting.
-        return f"A NearEarthObject ..."
+        # Done: Use this object's attributes to return a human-readable string representation.
+        is_hazardous = "is".lower().strip() if self.hazardous else "is not".lower().strip()
+        if not math.isnan(self.diameter):
+            return f"NEO {self.fullname} has a diameter of {self.diameter:.3f} km and {is_hazardous} potentially hazardous."
+        return f"NEO {self.fullname}, {is_hazardous} potentially hazardous."
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
@@ -83,6 +83,7 @@ class CloseApproach:
     private attribute, but the referenced NEO is eventually replaced in the
     `NEODatabase` constructor.
     """
+
     # TODO: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
     def __init__(self, **info):
@@ -103,7 +104,6 @@ class CloseApproach:
         self.neo = None
         if self.neo:
             return
-
 
     @property
     def time_str(self):
