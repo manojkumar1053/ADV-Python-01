@@ -69,6 +69,19 @@ class NearEarthObject:
         return f"NearEarthObject(designation={self.designation!r}, name={self.name!r}, " \
                f"diameter={self.diameter:.3f}, hazardous={self.hazardous!r})"
 
+    def serialize(self):
+        """Return a dict representation of self attributes.
+        Returns:
+            [dict]: Keys associated with self attributes.
+        """
+        return {
+            "designation": self.designation,
+            "name": self.name,
+            "diameter_km": self.diameter,
+            "potentially_hazardous": self.hazardous
+        }
+
+
 
 class CloseApproach:
     """A close approach to Earth by an NEO.
@@ -95,9 +108,12 @@ class CloseApproach:
         # onto attributes named `_designation`, `time`, `distance`, and `velocity`.
         # You should coerce these values to their appropriate data type and handle any edge cases.
         # The `cd_to_datetime` function will be useful.
-        self._designation = ''
-        self.time = None  # TODO: Use the cd_to_datetime function for this attribute.
+        self._designation = info.get("des", None)
+        self.time = info.get("cd",None)  # Done: Use the cd_to_datetime function for this attribute.
+
         self.distance = 0.0
+
+        #
         self.velocity = 0.0
 
         # Create an attribute for the referenced NEO, originally None.
