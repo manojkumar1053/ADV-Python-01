@@ -108,18 +108,20 @@ class CloseApproach:
         # onto attributes named `_designation`, `time`, `distance`, and `velocity`.
         # You should coerce these values to their appropriate data type and handle any edge cases.
         # The `cd_to_datetime` function will be useful.
-        self._designation = info.get("des", None)
-        self.time = info.get("cd",None)  # Done: Use the cd_to_datetime function for this attribute.
+        self._designation = info.get("des")
 
-        self.distance = 0.0
+        self.time = info.get("cd")  # Done: Use the cd_to_datetime function for this attribute.
+        assert isinstance(self.time, datetime.datetime), "date should be datetime object"
 
-        #
-        self.velocity = 0.0
+        self.distance = info.get("dist", float("nan"))
+        assert isinstance(self.distance, float("nan")), "distance should be float"
+
+        self.velocity = info.get("v_rel",float("nan")), "velocity should be float"
 
         # Create an attribute for the referenced NEO, originally None.
-        self.neo = None
-        if self.neo:
-            return
+        self.neo = info.get("neo")
+        # if self.neo:
+        #     return
 
     @property
     def time_str(self):
@@ -134,19 +136,38 @@ class CloseApproach:
         formatted string that can be used in human-readable representations and
         in serialization to CSV and JSON files.
         """
-        # TODO: Use this object's `.time` attribute and the `datetime_to_str` function to
+        # Done: Use this object's `.time` attribute and the `datetime_to_str` function to
         # build a formatted representation of the approach time.
-        # TODO: Use self.designation and self.name to build a fullname for this object.
-        return ''
+        # Done: Use self.designation and self.name to build a fullname for this object.
+        return datetime_to_str(str.time)
+
+    @property
+    def designation(self):
+        """Get designation
+        Returns:
+            [str]: Returns self._designation
+        """
+        return self._designation
 
     def __str__(self):
         """Return `str(self)`."""
-        # TODO: Use this object's attributes to return a human-readable string representation.
+        # Done: Use this object's attributes to return a human-readable string representation.
         # The project instructions include one possibility. Peek at the __repr__
         # method for examples of advanced string formatting.
-        return f"A CloseApproach ..."
+        return f"At {self.time_str}, '{self.neo.fullname}' approaches Earth at a distance of {self.distance:.2f} au and a velocity of {self.velocity:.2f} km/s."
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
         return f"CloseApproach(time={self.time_str!r}, distance={self.distance:.2f}, " \
                f"velocity={self.velocity:.2f}, neo={self.neo!r})"
+
+    def serialize(self):
+        """Return a dict representation of self attributes.
+        Returns:
+            [dict]: Keys associated with self attributes.
+        """
+        return {
+            "datetime_utc": datetime_to_str(self.time),
+            "distance_au": self.distance,
+            "velocity_km_s": self.velocity,
+        }
