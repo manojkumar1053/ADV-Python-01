@@ -17,9 +17,10 @@ quirks of the data set, such as missing names and unknown diameters.
 
 You'll edit this file in Task 1.
 """
-from helpers import cd_to_datetime, datetime_to_str
-import math
 import datetime
+import math
+
+from helpers import datetime_to_str
 
 
 class NearEarthObject:
@@ -82,7 +83,6 @@ class NearEarthObject:
         }
 
 
-
 class CloseApproach:
     """A close approach to Earth by an NEO.
 
@@ -97,14 +97,14 @@ class CloseApproach:
     `NEODatabase` constructor.
     """
 
-    # TODO: How can you, and should you, change the arguments to this constructor?
+    # Done: How can you, and should you, change the arguments to this constructor?
     # If you make changes, be sure to update the comments in this file.
     def __init__(self, **info):
         """Create a new `CloseApproach`.
 
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
-        # TODO: Assign information from the arguments passed to the constructor
+        # Done: Assign information from the arguments passed to the constructor
         # onto attributes named `_designation`, `time`, `distance`, and `velocity`.
         # You should coerce these values to their appropriate data type and handle any edge cases.
         # The `cd_to_datetime` function will be useful.
@@ -116,7 +116,7 @@ class CloseApproach:
         self.distance = info.get("dist", float("nan"))
         assert isinstance(self.distance, float("nan")), "distance should be float"
 
-        self.velocity = info.get("v_rel",float("nan")), "velocity should be float"
+        self.velocity = info.get("v_rel", float("nan")), "velocity should be float"
 
         # Create an attribute for the referenced NEO, originally None.
         self.neo = info.get("neo")
@@ -171,3 +171,7 @@ class CloseApproach:
             "distance_au": self.distance,
             "velocity_km_s": self.velocity,
         }
+
+
+neo = NearEarthObject("M:\repos\ADV-Python-01\data\neos.csv")
+print(neo.designation)
