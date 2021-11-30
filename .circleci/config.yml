@@ -7,7 +7,7 @@ jobs:
 
     working_directory: ~/repo
     
-    parallelism: 9
+    parallelism: 4
     steps:
       # Step 1: obtain repo from GitHub
       - checkout
@@ -39,9 +39,6 @@ jobs:
             python3 -m unittest tests.test_query tests.test_limit
             python3 main.py query --date 2020-01-01
             python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31
-            python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31 --max-distance 0.1
-            python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31 --min-distance 0.3
-            python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31 --max-velocity 50
             python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31 --min-velocity 25
             python3 main.py query --min-diameter 0.5 --max-diameter 0.6 --not-hazardous
             python3 main.py query --max-distance 0.1 --min-velocity 35 --min-diameter 2.5 --hazardous
