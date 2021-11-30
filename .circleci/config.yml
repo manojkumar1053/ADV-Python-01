@@ -25,10 +25,10 @@ jobs:
           name: Run Task 2 unit tests
           command: |
             . venv/bin/activate
-            python3 -m unittest --verbose tests.test_extract tests.test_database
-            python3 main.py inspect --name Halley
-            python3 main.py inspect --pdes 433
-            python3 main.py inspect --verbose --name Ganymed
+            python3 -m unittest --verbose tests.test_extract tests.test_database &
+            python3 main.py inspect --name Halley &
+            python3 main.py inspect --pdes 433 &
+            python3 main.py inspect --verbose --name Ganymed &
 
 
       # Step 4: run task3  tests
