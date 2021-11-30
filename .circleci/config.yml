@@ -54,11 +54,30 @@ jobs:
           name: Run Task Full unit tests
           command: |
             . venv/bin/activate
+            echo "******************************"
+            echo "Check the output file"
+            echo "******************************"
+            ls -lah results*
+            echo "******************************"
+            echo "Remove the old output files"
+            rm -rf results*
+            echo "******************************"
+            echo "Generate the output file"
             python3 main.py query --date 2020-01-01 --limit 5 --outfile results.csv
-            ls -ltrah
+            echo "******************************"
+            echo "Check the content of the output file"
             python3 main.py query --date 2020-01-01 --limit 5 --outfile results.json
+            echo "******************************"
+            cat results.csv
+            echo "******************************"
+            cat results.json
+            echo "******************************"
             python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31 --hazardous --min-diameter 0.25 --max-distance 0.1 --limit 5 --outfile results.json
-
+            echo "******************************"
+            cat results.csv
+            echo "******************************"
+            cat results.json
+            echo "******************************"
 
           # # Step 4 run API Tests
           # - run:
