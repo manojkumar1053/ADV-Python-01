@@ -81,14 +81,14 @@ jobs:
             echo "******************************"
             cat results.json
             echo "******************************"
-
-      # Step 7 test parallel execution
-      - run:
-          name: Run API test methods
-          command: |
-            . venv/bin/activate
-            chmod u+x testrun.sh
-            ./testrun.sh
+#
+#      # Step 7 test parallel execution
+#      - run:
+#          name: Run API test methods
+#          command: |
+#            . venv/bin/activate
+#            chmod u+x testrun.sh
+#            ./testrun.sh
 
       # # Genarate output CSV File
       # - run:
