@@ -1,4 +1,5 @@
-"""A database encapsulating collections of near-Earth objects and their close approaches.
+"""A database encapsulating collections of near-Earth objects and their
+close approaches.
 
 A `NEODatabase` holds an interconnected data set of NEOs and close approaches.
 It provides methods to fetch an NEO by primary designation or by name, as well
@@ -11,6 +12,7 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 
 You'll edit this file in Tasks 2 and 3.
 """
+from filters import DateFilter
 
 
 class NEODatabase:
@@ -21,6 +23,7 @@ class NEODatabase:
     help fetch NEOs by primary designation or by name and to help speed up
     querying for close approaches that match criteria.
     """
+
     def __init__(self, neos, approaches):
         """Create a new `NEODatabase`.
 
@@ -39,21 +42,23 @@ class NEODatabase:
         :param neos: A collection of `NearEarthObject`s.
         :param approaches: A collection of `CloseApproach`es.
         """
-        self._neos = neos
-        self._approaches = approaches
 
-        # Done: What additional auxiliary data structures will be useful?
-        self._pdes_to_index = {neo.designation: index for index, neo in enumerate(self._neos)}
+        self.approaches = approaches
 
-
-        # Done: Link together the NEOs and their close approaches.
-        for approach in self._approaches:
-            if approach.designation in self._pdes_to_index.keys():
-                approach.neo = self._neos[self._pdes_to_index[approach.designation]]
-                self._neos[self._pdes_to_index[approach.designation]].approaches.append(approach)
-
-        self._des_to_neo = {neo.designation: neo for neo in self._neos}
-        self.name_to_neo = {neo.name: neo for neo in self._neos}
+        self._neos = {neo.designation: neo for neo in neos}
+        # for get_neo_by_name
+        # names are not always present (the '' key will not be unique),
+        # but this is not a restriction because it will only be used for a name that the user provides
+        self._name_to_des = {neo.name: neo.designation for neo in neos}
+        self._approaches = {}
+        for approach in approaches:
+            if self._approaches.get(approach.designation, None):
+                self._approaches[approach.designation].append(approach)
+            else:
+                self._approaches[approach.designation] = [approach]
+            for a in self._approaches[approach.designation]:
+                a.neo = self._neos[approach.designation]
+            self._neos[approach.designation].approaches.append(approach)
 
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
@@ -68,8 +73,7 @@ class NEODatabase:
         :param designation: The primary designation of the NEO to search for.
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
-        # Done: Fetch an NEO by its primary designation.
-        return self._des_to_neo.get(designation.upper(), None)
+        return self._neos.get(designation.upper(), None)
 
     def get_neo_by_name(self, name):
         """Find and return an NEO by its name.
@@ -85,8 +89,10 @@ class NEODatabase:
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
-        # Done: Fetch an NEO by its name.
-        return self.name_to_neo.get(name.capitalize(), None)
+        designation = self._name_to_des.get(name.capitalize(), None)
+        if designation:
+            return self.get_neo_by_designation(designation)
+        return None
 
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.
@@ -97,16 +103,61 @@ class NEODatabase:
         If no arguments are provided, generate all known close approaches.
 
         The `CloseApproach` objects are generated in internal order, which isn't
-        guaranteed to be sorted meaningfully, although is often sorted by time.
+        guaranteed to be sorted meaninfully, although is often sorted by time.
 
         :param filters: A collection of filters capturing user-specified criteria.
         :return: A stream of matching `CloseApproach` objects.
         """
-        # Done: Generate `CloseApproach` objects that match all of the filters.
-        if filters:
-            for approach in self._approaches:
-                if all(map(lambda f: f(approach), filters)):
-                    yield approach
+        date_filters = ["date", "start_date", "end_date"]
+        no_date = all([f for f in filters.keys() if f not in date_filters])
 
-        for approach in self._approaches:
-            yield approach
+        for approach in self.approaches:
+            passed_dates = True
+            if no_date and all((map(lambda x: x(approach), filters.values()))):
+                yield approach
+            elif not no_date:
+                if "date" in filters:
+                    passed_dates = filters["date"](approach)
+                    if passed_dates and all(
+                        (
+                            map(
+                                lambda x: x(approach),
+                                [
+                                    f
+                                    for name, f in filters.items()
+                                    if name not in date_filters
+                                ],
+                            )
+                        )
+                    ):  # passed the exact date and all the non-date related filters
+                        yield approach
+                    elif not passed_dates:
+                        # should be between start and end date
+                        passed_dates = all(
+                            (
+                                map(
+                                    lambda x: x(approach),
+                                    [
+                                        f
+                                        for name, f in filters.items()
+                                        if name in ["start_date", "end_date"]
+                                    ],
+                                )
+                            )
+                        )
+                        if passed_dates and all(
+                            (
+                                map(
+                                    lambda x: x(approach),
+                                    [
+                                        f
+                                        for name, f in filters.items()
+                                        if name not in date_filters
+                                    ],
+                                )
+                            )
+                        ):
+                            yield approach
+                else:
+                    if all((map(lambda x: x(approach), filters.values()))):
+                        yield approach

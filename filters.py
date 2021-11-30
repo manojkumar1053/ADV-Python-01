@@ -17,6 +17,7 @@ iterator.
 You'll edit this file in Tasks 3a and 3c.
 """
 import operator
+import itertools
 
 
 class UnsupportedCriterionError(NotImplementedError):
@@ -38,6 +39,7 @@ class AttributeFilter:
     Concrete subclasses can override the `get` classmethod to provide custom
     behavior to fetch a desired attribute from the given `CloseApproach`.
     """
+
     def __init__(self, op, value):
         """Construct a new `AttributeFilter` from an binary predicate and a reference value.
 
@@ -72,19 +74,98 @@ class AttributeFilter:
         return f"{self.__class__.__name__}(op=operator.{self.op.__name__}, value={self.value})"
 
 
+class DateFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        """Returns approach.time converted to datetime.datetime object
+        for the date filter.
+
+        Args:
+            approach (CloseApproach): A CloseApproach object.
+
+        Returns:
+            [datetime.datetime]: Converted time to datetime object.
+        """
+        return approach.time.date()
+
+
+class DistanceFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        """Returns distance of the CloseApproach object
+        for the distance filter.
+
+        Args:
+            approach (CloseApproach): A CloseApproach object.
+
+        Returns:
+            [float]: Returns the distance of a CloseApproach.
+        """
+        return approach.distance
+
+
+class VelocityFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        """Returns approach.velocity for the velocity filter.
+
+        Args:
+            approach (CloseApproach): A CloseApproach object.
+
+        Returns:
+            [float]: Returns the velocity of a CloseApproach.
+        """
+        return approach.velocity
+
+
+class DiameterFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        """Returns the diameter of the neo assigned to the CloseApproach object
+        for the diameter filter.
+
+        Args:
+            approach (CloseApproach): A CloseApproach object.
+
+        Returns:
+            [float]: Returns the diameter of a NearEarthObject object.
+        """
+        return approach.neo.diameter
+
+
+class HazardousFilter(AttributeFilter):
+    @classmethod
+    def get(cls, approach):
+        """Returns the hazardous attribute of the neo assigned to the
+        CloseApproach object for the diameter filter.
+
+        Args:
+            approach (CloseApproach): A CloseApproach object.
+
+        Returns:
+            [float]: Returns the hazardous attribute of a NearEarthObject object.
+        """
+        return approach.neo.hazardous
+
+
 def create_filters(
-        date=None, start_date=None, end_date=None,
-        distance_min=None, distance_max=None,
-        velocity_min=None, velocity_max=None,
-        diameter_min=None, diameter_max=None,
-        hazardous=None
+    date=None,
+    start_date=None,
+    end_date=None,
+    distance_min=None,
+    distance_max=None,
+    velocity_min=None,
+    velocity_max=None,
+    diameter_min=None,
+    diameter_max=None,
+    hazardous=None,
 ):
     """Create a collection of filters from user-specified criteria.
 
     Each of these arguments is provided by the main module with a value from the
     user's options at the command line. Each one corresponds to a different type
     of filter. For example, the `--date` option corresponds to the `date`
-    argument, and represents a filter that selects close approaches that occurred
+    argument, and represents a filter that selects close approaches that occured
     on exactly that given date. Similarly, the `--min-distance` option
     corresponds to the `distance_min` argument, and represents a filter that
     selects close approaches whose nominal approach distance is at least that
@@ -108,8 +189,29 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
-    return ()
+    filters = {}
+    if date:
+        filters["date"] = DateFilter(operator.eq, date)
+    if start_date:
+        filters["start_date"] = DateFilter(operator.ge, start_date)
+    if end_date:
+        filters["end_date"] = DateFilter(operator.le, end_date)
+    if distance_min:
+        filters["distance_min"] = DistanceFilter(operator.ge, distance_min)
+    if distance_max:
+        filters["distance_max"] = DistanceFilter(operator.le, distance_max)
+    if velocity_min:
+        filters["velocity_min"] = VelocityFilter(operator.ge, velocity_min)
+    if velocity_max:
+        filters["velocity_max"] = VelocityFilter(operator.le, velocity_max)
+    if diameter_min:
+        filters["diameter_min"] = DiameterFilter(operator.ge, diameter_min)
+    if diameter_max:
+        filters["diameter_max"] = DiameterFilter(operator.le, diameter_max)
+    if hazardous is not None:
+        filters["hazardous"] = HazardousFilter(operator.eq, hazardous)
+
+    return filters
 
 
 def limit(iterator, n=None):
@@ -121,5 +223,6 @@ def limit(iterator, n=None):
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
-    return iterator
+    if n == 0 or n is None:
+        return iterator
+    return list(itertools.islice(iterator, 0, n))
