@@ -53,14 +53,14 @@ def write_to_json(results, filename):
     :param filename: A Path-like object pointing to where the data should be saved.
     """
     # done: Write the results to a JSON file, following the specification in the instructions.
-    data = []
+    output_data = []
     for row in results:
         info = row.serialize() | row.neo.serialize()
         info["name"] = info["name"] if info["name"] is not None else ""
         info["potentially_hazardous"] = (
             bool(1) if info["potentially_hazardous"] else bool(0)
         )
-        data.append(
+        output_data.append(
             {
                 "datetime_utc": info["datetime_utc"],
                 "distance_au": info["distance_au"],
@@ -75,4 +75,4 @@ def write_to_json(results, filename):
         )
 
     with open(filename, "w") as file:
-        json.dump(data, file, indent="\t")
+        json.dump(output_data, file, indent="\t")
