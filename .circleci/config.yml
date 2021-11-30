@@ -49,14 +49,15 @@ jobs:
             . venv/bin/activate
             python3 -m unittest
 
-          # # Step 6: run output file tests
-          # - run:
-          #     name: Run Task Full unit tests
-          #     command: |
-          #       . venv/bin/activate
-          #       python3 main.py query --date 2020-01-01 --limit 5 --outfile results.csv
-          #       python3 main.py query --date 2020-01-01 --limit 5 --outfile results.json
-          #       python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31 --hazardous --min-diameter 0.25 --max-distance 0.1 --limit 5 --outfile results.json
+      # Step 6: run output file tests
+      - run:
+          name: Run Task Full unit tests
+          command: |
+            . venv/bin/activate
+            python3 main.py query --date 2020-01-01 --limit 5 --outfile results.csv
+            python3 main.py query --date 2020-01-01 --limit 5 --outfile results.json
+            python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31 --hazardous --min-diameter 0.25 --max-distance 0.1 --limit 5 --outfile results.json
+
 
           # # Step 4 run API Tests
           # - run:
