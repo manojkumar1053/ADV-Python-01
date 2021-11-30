@@ -1,5 +1,5 @@
 """Provide filters for querying close approaches and limit the generated results.
-
+# --#
 The `create_filters` function produces a collection of objects that is used by
 the `query` method to generate a stream of `CloseApproach` objects that match
 all of the desired criteria. The arguments to `create_filters` are provided by
