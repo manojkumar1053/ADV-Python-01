@@ -6,7 +6,8 @@ jobs:
       - image: circleci/python:3.8
 
     working_directory: ~/repo
-
+    
+    parallelism: 9
     steps:
       # Step 1: obtain repo from GitHub
       - checkout
