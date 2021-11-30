@@ -1,11 +1,11 @@
-data
-data/neos.csv
-data/cad.json
+# data
+# data/neos.csv
+# data/cad.json
 ons2
 ons2/*
 Rrequirements.txt
 
-tests/
+# tests/
 .idea
 .idea/*
 .gitignore
