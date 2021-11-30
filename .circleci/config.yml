@@ -55,6 +55,7 @@ jobs:
           command: |
             . venv/bin/activate
             python3 main.py query --date 2020-01-01 --limit 5 --outfile results.csv
+            ls -ltrah
             python3 main.py query --date 2020-01-01 --limit 5 --outfile results.json
             python3 main.py query --start-date 2020-01-01 --end-date 2020-12-31 --hazardous --min-diameter 0.25 --max-distance 0.1 --limit 5 --outfile results.json
 
