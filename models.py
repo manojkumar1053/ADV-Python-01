@@ -173,5 +173,5 @@ class CloseApproach:
         }
 
 
-neo = NearEarthObject("M:\repos\ADV-Python-01\data\neos.csv")
-print(neo.designation)
+# neo = NearEarthObject("M:\repos\ADV-Python-01\data\neos.csv")
+# print(neo.designation)
