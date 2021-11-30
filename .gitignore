@@ -1,6 +1,8 @@
 data
 data/neos.csv
 data/cad.json
+near_earth_obj
+near_earth_obj/*
 
 tests/
 .idea
