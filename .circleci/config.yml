@@ -1,0 +1,52 @@
+# Python CircleCI 2.0 configuration file
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7
+
+    working_directory: ~/repo
+
+    steps:
+      # Step 1: obtain repo from GitHub
+      - checkout
+      # Step 2: create virtual env and install dependencies
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+
+
+      # Step 3: run linter and tests
+      - run:
+          name: Run unit tests
+          command: |
+            . venv/bin/activate
+            python3 -m unittest
+ 
+         
+      # # Step 4 run API Tests 
+      # - run:
+      #     name: Run API test methods
+      #     command: |
+      #       . venv/bin/activate
+      #         pyhttptest execute apitest.json
+          
+      # # Genarate output CSV File
+      # - run:
+      #     name: Generate Output CSV File
+      #     command: |
+      #       . venv/bin/activate
+      #       rm -rf  data/ou*
+      #       ./wp.sh input.csv output.csv
+      #       echo "******************************"
+      #       echo "Content of /data directory"
+      #       echo "******************************"
+      #       mv data/out* data/output.csv
+      #       ls -ltrhi  data/
+      #       echo "******************************"
+      #       echo "Content of the Output CSV File"
+      #       echo "******************************"
+      #       cat data/out*
+      #       echo "___________S U C C E S S !!!_________________________"

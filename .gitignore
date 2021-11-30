@@ -3,6 +3,7 @@ data/neos.csv
 data/cad.json
 ons2
 ons2/*
+Rrequirements.txt
 
 tests/
 .idea
