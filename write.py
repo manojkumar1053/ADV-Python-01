@@ -33,7 +33,9 @@ def write_to_csv(results, filename):
         writer = csv.DictWriter(output_file, fieldnames=fieldnames)
         writer.writeheader()
         for row in results:
-            info = row.serialize() | row.neo.serialize()
+            #info = row.serialize() | row.neo.serialize() works on python 3.9
+            d1,d2 = row.serialize(),row.neo.serialize()
+            info = {**d1,**d2}
             info["name"] = info["name"] if info["name"] is not None else ""
             info["potentially_hazardous"] = (
                 "True" if info["potentially_hazardous"] else "False"

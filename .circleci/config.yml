@@ -7,7 +7,7 @@ jobs:
 
     working_directory: ~/repo
 
-    parallelism: 4
+    parallelism: 2
     steps:
       # Step 1: obtain repo from GitHub
       - checkout
