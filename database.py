@@ -12,7 +12,6 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 
 You'll edit this file in Tasks 2 and 3.
 """
-from filters import DateFilter
 
 
 class NEODatabase:
@@ -119,16 +118,16 @@ class NEODatabase:
                 if "date" in filters:
                     passed_dates = filters["date"](approach)
                     if passed_dates and all(
-                        (
-                            map(
-                                lambda x: x(approach),
-                                [
-                                    f
-                                    for name, f in filters.items()
-                                    if name not in date_filters
-                                ],
+                            (
+                                    map(
+                                        lambda x: x(approach),
+                                        [
+                                            f
+                                            for name, f in filters.items()
+                                            if name not in date_filters
+                                        ],
+                                    )
                             )
-                        )
                     ):  # passed the exact date and all the non-date related filters
                         yield approach
                     elif not passed_dates:
@@ -146,16 +145,16 @@ class NEODatabase:
                             )
                         )
                         if passed_dates and all(
-                            (
-                                map(
-                                    lambda x: x(approach),
-                                    [
-                                        f
-                                        for name, f in filters.items()
-                                        if name not in date_filters
-                                    ],
+                                (
+                                        map(
+                                            lambda x: x(approach),
+                                            [
+                                                f
+                                                for name, f in filters.items()
+                                                if name not in date_filters
+                                            ],
+                                        )
                                 )
-                            )
                         ):
                             yield approach
                 else:

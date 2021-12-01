@@ -17,9 +17,10 @@ quirks of the data set, such as missing names and unknown diameters.
 
 You'll edit this file in Task 1.
 """
-from helpers import cd_to_datetime, datetime_to_str
-import math
 import datetime
+import math
+
+from helpers import cd_to_datetime, datetime_to_str
 
 
 class NearEarthObject:
@@ -43,11 +44,11 @@ class NearEarthObject:
         """
         self.designation = info.get("pdes")
         self.name = info.get("name")
+        # self.diameter = info.get("diameter") if self.diameter else float("nan")
         self.diameter = info.get("diameter")
         if not self.diameter:
             self.diameter = float("nan")
         self.hazardous = info.get("pha")
-
         # Create an empty initial collection of linked approaches.
         self.approaches = []
 
@@ -60,7 +61,7 @@ class NearEarthObject:
 
     def __str__(self):
         """Return `str(self)`."""
-        is_hazardous = "is" if self.hazardous else "is not"
+        is_hazardous = "is".lower().strip() if self.hazardous else "is not".lower().strip()
         if not math.isnan(self.diameter):
             return f"NEO {self.fullname} has a diameter of \
                 {self.diameter:.3f} km and {is_hazardous} \
@@ -111,16 +112,14 @@ class CloseApproach:
         self._designation = info.get("des")
         self.time = info.get("cd", None)
         if self.time:
-            # print(type(self.time))
             self.time = cd_to_datetime(self.time)
-            assert isinstance(
-                self.time, datetime.datetime
-            ), "Date should be a datetime object"
-        self.distance = info.get("dist", float("nan"))
-        self.velocity = info.get("v_rel", float("nan"))
+            assert isinstance(self.time, datetime.datetime), "date should be datetime type"
 
-        assert isinstance(self.distance, float), "Distance should be a float"
-        assert isinstance(self.velocity, float), "Velocity should be a float"
+        self.distance = info.get("dist", float("nan"))
+        assert isinstance(self.distance, float), "distance should be float"
+
+        self.velocity = info.get("v_rel", float("nan"))
+        assert isinstance(self.velocity, float), "velocity should be float"
 
         # Create an attribute for the referenced NEO, originally None.
         self.neo = info.get("neo", None)

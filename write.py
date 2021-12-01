@@ -29,8 +29,8 @@ def write_to_csv(results, filename):
         'designation', 'name', 'diameter_km', 'potentially_hazardous'
     )
     # Done: Write the results to a CSV file, following the specification in the instructions.
-    with open(filename, "w", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
+    with open(filename, "w", newline="") as output_file:
+        writer = csv.DictWriter(output_file, fieldnames=fieldnames)
         writer.writeheader()
         for row in results:
             info = row.serialize() | row.neo.serialize()
@@ -55,7 +55,9 @@ def write_to_json(results, filename):
     # done: Write the results to a JSON file, following the specification in the instructions.
     output_data = []
     for row in results:
-        info = row.serialize() | row.neo.serialize()
+        d1,d2 = row.serialize(),row.neo.serialize()
+        #info = row.serialize() | row.neo.serialize()  # Use python 3.9 or higher
+        info = {**d1,**d2}
         info["name"] = info["name"] if info["name"] is not None else ""
         info["potentially_hazardous"] = (
             bool(1) if info["potentially_hazardous"] else bool(0)
