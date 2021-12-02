@@ -55,9 +55,10 @@ class NearEarthObject:
     @property
     def fullname(self):
         """Return a representation of the full name of this NEO."""
-        if self.name:
-            return f"{self.designation} ({self.name})"
-        return self.designation
+        # if self.name:
+        #     return f"{self.designation} ({self.name})"
+        # return self.designation
+        return f"{self.designation} ({self.name})" if self.name else self.designation
 
     def __str__(self):
         """Return `str(self)`."""
