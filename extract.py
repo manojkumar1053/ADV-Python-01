@@ -14,7 +14,6 @@ You'll edit this file in Task 2.
 """
 import csv
 import json
-
 from models import NearEarthObject, CloseApproach
 
 
@@ -30,10 +29,12 @@ def load_neos(neo_csv_path):
         near_earth_objects = []
         for line in reader:
             # diameter not always available
-            if not line["diameter"]:
-                line["diameter"] = None
-            else:
-                line["diameter"] = float(line["diameter"])
+            # if not line["diameter"]:
+            #     line["diameter"] = None
+            # else:
+            #     line["diameter"] = float(line["diameter"])
+
+            line["diameter"] = float(line["diameter"]) if line["diameter"] else None
 
             if not line["name"]:
                 line["name"] = None
