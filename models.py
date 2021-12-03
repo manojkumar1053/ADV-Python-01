@@ -108,7 +108,7 @@ class CloseApproach:
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
         self._designation = info.get("des")
-        self.time = info.get("cd", None)
+        self.time = info.get("cd")
         if self.time:
             self.time = cd_to_datetime(self.time)
         assert isinstance(self.time, datetime.datetime), "date should be datetime type"
@@ -120,7 +120,7 @@ class CloseApproach:
         assert isinstance(self.velocity, float), "velocity should be float"
 
         # Create an attribute for the referenced NEO, originally None.
-        self.neo = info.get("neo", None)
+        self.neo = info.get("neo")
 
     @property
     def designation(self):
