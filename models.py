@@ -111,7 +111,7 @@ class CloseApproach:
         self.time = info.get("cd", None)
         if self.time:
             self.time = cd_to_datetime(self.time)
-            assert isinstance(self.time, datetime.datetime), "date should be datetime type"
+        assert isinstance(self.time, datetime.datetime), "date should be datetime type"
 
         self.distance = info.get("dist", float("nan"))
         assert isinstance(self.distance, float), "distance should be float"
