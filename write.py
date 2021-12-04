@@ -25,7 +25,7 @@ def write_to_csv(results, filename):
     :param filename: A Path-like object pointing to where the data should be saved.
     """
     fieldnames = (
-        'datetime_utc', 'distance_au', 'velocity_km_s',
+        'UTC_DATETIME', 'distance_au', 'velocity_km_s',
         'designation', 'name', 'diameter_km', 'potentially_hazardous'
     )
     # Done: Write the results to a CSV file, following the specification in the instructions.
@@ -66,7 +66,7 @@ def write_to_json(results, filename):
         )
         output_data.append(
             {
-                "datetime_utc": info["datetime_utc"],
+                "UTC_DATETIME": info["UTC_DATETIME"],
                 "distance_au": info["distance_au"],
                 "velocity_km_s": info["velocity_km_s"],
                 "neo": {

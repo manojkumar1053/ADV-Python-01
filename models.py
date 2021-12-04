@@ -167,7 +167,6 @@ class CloseApproach:
             [dict]: Keys associated with self attributes.
         """
         return {
-            "datetime_utc": datetime_to_str(self.time),
-            "distance_au": self.distance,
+            "UTC_DATETIME": datetime_to_str(self.time),  # datetime_utc
             "velocity_km_s": self.velocity,
         }
