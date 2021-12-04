@@ -36,8 +36,8 @@ def load_neos(neo_csv_path):
 
             line["diameter"] = float(line["diameter"]) if line["diameter"] else None
 
-            # if not line["name"]:
-            #     line["name"] = None
+            if not line["name"]:
+                line["name"] = None
 
             line["pha"] = False if line["pha"] in ["N", ""] else True
 
